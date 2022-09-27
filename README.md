@@ -1,4 +1,4 @@
-tech stack used : python3,HTML,CSS,Bootstrap
+tech stack used : python3,HTML,CSS,Javascript
 Framework used: django
 Database used: SQL
 
