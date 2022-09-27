@@ -1,0 +1,45 @@
+/* Search Section */
+#search-form {
+    position: relative;
+}
+#search-form::after {
+    position: absolute;
+    top: 0.4rem;
+    right: 3.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 1.8rem;
+    padding-right: 0.25rem;
+    padding-left: 0.25rem;
+    font-size: 1.1rem;
+    color: #6c757d;
+    content: "Ctrl + /";
+    border: 1px solid #dee2e6;
+    border-radius: 0.125rem;
+}
+
+/* Profile Menu Section */
+.profile-menu {
+    margin-top: 11px !important;
+}
+
+
+/* Discounted Price Display */
+.discounted-price {
+    color: rgb(223 0 0);
+    font-size: 1.5em;
+}
+.precent-off {
+    color: rgb(0 0 0);
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+
+@media all and (max-width: 768px) {
+    #search-form::after {
+        content: none;
+    }
+}
+

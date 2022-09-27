@@ -1,0 +1,18 @@
+<div class="col">
+    <div class="card h-100">
+        <a href="{% url 'shop:product_detail' slug=product.slug %}">
+            <img src="{{ product.image1.url }}" class="card-img-top" alt="{{ product.name }}">
+        </a>
+        <div class="card-body">
+            <h5 class="card-title">
+                <a href="{% url 'shop:product_detail' slug=product.slug %}">{{ product.name }}</a>
+            </h5>
+            <p class="card-text">{{ product.excerpt|truncatechars:350 }}</p>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted">
+                {% include 'home/components/discount_price.html' with product=product %}
+            </small>
+        </div>
+    </div>
+</div>

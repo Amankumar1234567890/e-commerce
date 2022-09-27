@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+pillow = "*"
+django-cron = "*"
+razorpay = "*"
+django-heroku = "*"
+django-environ = "*"
+gunicorn = "*"
+whitenoise = "*"
+django-cloudinary-storage = "*"
+
+[dev-packages]
+python-dotenv = "*"
+
+[requires]
+python_version = "3.10"

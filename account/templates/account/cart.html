@@ -1,0 +1,151 @@
+{% extends 'home/base.html' %}
+
+{% block title %}Your Shopping Cart | Evolves{% endblock title %}
+
+{% block css %}
+
+a {
+    color: #000000;
+    text-decoration: none;
+}
+
+.delete-product {
+    font-size: 18px;
+    color: red;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.product-name {
+    font-size: 1.2em;
+}
+.product-price {
+    font-size: .8em;
+}
+.product-image {
+    width: 100px;
+}
+
+.product-div {
+    flex-direction: row;
+}
+
+@media all and (max-width: 500px) {
+    .product-div {
+        flex-direction: column;
+    }
+    .product-name {
+        font-size: 1em;
+    }
+    .product-price {
+        font-size: .6em;
+    }
+}
+
+{% endblock css %}
+
+{% block body %}
+
+<div class="container w-75 my-5">
+    <h1>Your Cart</h1>
+
+    <hr>
+
+    <ul class="list-group mx-auto">
+        <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
+            <span>Product</span>
+            <span>Quantity &nbsp;&nbsp;&nbsp;&nbsp;</span>
+        </li>
+        
+        <div id="cart-list"></div>
+        
+        <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
+            <span>Total</span>
+            <span class="fs-4">
+                &#x20B9;
+                <span id="total-price">0</span>
+            </span>
+        </li>
+    </ul>
+    
+    {% if cart != '[]' %}
+    <div class="my-3 text-center d-flex align-items-center justify-content-end">
+        <a href="#" id="clear-cart" onclick="clear_cart();" class="btn btn-danger mx-2">Clear Cart <i class="bi bi-stars"></i></a>
+        <a href="{% url 'shop:checkout' %}" class="btn btn-primary btn-lg mx-2">Checkout <i class="bi bi-arrow-right-circle-fill"></i></a>
+    </div>
+    {% endif %}
+
+</div>
+
+{% endblock body %}
+
+{% block js %}
+
+
+if (localStorage.getItem('cart') !== null) {
+    const cart = JSON.parse(localStorage.getItem('cart'));
+    
+    if (cart.length == 0) {
+        $('#cart-list').append(`<li class="list-group-item d-flex flex-row justify-content-center align-items-center">
+                                    <h3 class="mx-auto">Your CART is empty :(</h3>
+                                </li>`);
+    }
+    
+    // to list and display all cart items
+    cart.forEach(product => {
+        let newPriceString = addCommas(product.price);
+        
+        $('#cart-list').append(`<li id="listPr${product.id}" class="list-group-item d-flex flex-row justify-content-between align-items-center">
+                                    <a href="/product/${product.slug}" class="product-div d-flex align-items-center">
+                                        <img src="${product.img}" alt="${product.name}" class="product-image">
+                                        
+                                        <div class="d-flex flex-column align-items-start flex-wrap p-3">
+                                            <p class="product-name">${product.name}</p>
+                                            <span class="badge rounded-pill bg-dark">&#x20B9; ${newPriceString}</span>
+                                        </div>
+                                    </a>
+                                    
+                                    <div class="d-flex flex-row">
+                                        <span class="badge rounded-pill bg-primary fs-6">${product.quantity}</span>
+                                        <i id="deletePr${product.id}" class="delete-product bi bi-x-circle-fill"></i>
+                                    </div>
+                                </li>`);
+    });
+} else {
+    $('#cart-list').append(`<li class="list-group-item d-flex flex-row justify-content-center align-items-center">
+                                <h3 class="mx-auto">Your CART is empty :(</h3>
+                            </li>`);
+}
+
+
+// To display total payable price
+const cart = JSON.parse(localStorage.getItem('cart'));
+if (cart !== null) {
+    let totalCost = 0;
+    cart.forEach(product => {
+        totalCost += product.price * product.quantity;
+    });
+    totalCost = addCommas(totalCost);
+    $('#total-price').text(totalCost);
+}
+
+
+// To delete specific product
+const csrftoken = '{{ csrf_token }}';
+
+$('.delete-product').on('click', (e) => {
+    const iconId = e.target.getAttribute('id');
+    const productId = parseInt(iconId.slice(8, iconId.length))
+
+    delete_cart(productId, csrftoken);
+});
+
+
+// Clear Cart
+$('#clear-cart').on('click', () => {
+    update_cart([], '{{ csrf_token }}');
+    alert('Cart Cleared!');
+    window.location = '/';
+});
+
+{% endblock js %}
